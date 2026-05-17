@@ -37,6 +37,43 @@ To wire submissions to email, in Netlify: Site → **Forms** → **Form notifica
 
 If you ever move off Netlify, swap the `fetch('/', ...)` call in `assets/js/main.js` (`#leadForm` handler) with a POST to your endpoint of choice (Formspree, Getform, Basin, your CRM, etc.).
 
+## Backend integration — for the backend developer
+
+This site is intentionally front-end only. To connect the lead form to a CRM (GHL, HubSpot, etc.), there's exactly **one place to edit** in each of two files.
+
+### Form fields (`index.html`, inside `<form id="leadForm">`)
+
+| Field | Type | Required | Maps cleanly to |
+|---|---|---|---|
+| `name` | text | yes | Contact name (split on first space for first/last) |
+| `phone` | tel | yes | Contact phone |
+| `email` | email | yes | Contact email |
+| `service` | select | yes | Custom field — "Service Requested" |
+| `message` | textarea | no | Notes |
+| `bot-field` | hidden honeypot | no | Drop submissions where this is non-empty |
+| `form-name` | hidden = `free-inspection` | always | Useful for routing/source attribution |
+
+### Where to plug in the endpoint
+
+1. **`index.html`** — set the GHL Inbound Webhook URL (or other CRM endpoint) on the `<form>`:
+
+   ```html
+   <form id="leadForm" ... data-ghl-endpoint="https://services.leadconnectorhq.com/hooks/...">
+   ```
+
+2. **`assets/js/main.js`** — find the comment block `BACKEND HOOKUP HERE` inside the `#leadForm` submit handler. The fetch already reads `form.dataset.ghlEndpoint`, so once the attribute is set the form will POST there. Adjust `Content-Type` / body encoding if the endpoint needs JSON instead of URL-encoded.
+
+Keep the honeypot (`bot-field`) and the inline `#formSuccess` element in place — they handle spam protection and the success UI respectively.
+
+### Other common GHL touchpoints (where to drop snippets)
+
+| Feature | Where to put it |
+|---|---|
+| GHL chat widget | Paste snippet just before `</body>` in `index.html` |
+| GHL calendar embed | Add a new section before the Offer form, or replace the form with the calendar iframe |
+| Call tracking number | Search/replace `(602) 555-1847` and `tel:+16025551847` across `index.html` |
+| FB Pixel / Google Ads | Add in `<head>` of `index.html`; fire conversion event from the form's success callback in `main.js` |
+
 ## Business Information Built In
 
 | Field | Value |

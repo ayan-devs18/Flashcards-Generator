@@ -214,7 +214,21 @@
             const data = {};
             new FormData(form).forEach((v, k) => { data[k] = v; });
 
-            fetch('/', {
+            /* =====================================================
+               BACKEND HOOKUP HERE
+               -----------------------------------------------------
+               Currently POSTs to "/" for Netlify Forms.
+               To connect to GHL, set data-ghl-endpoint="..." on the
+               <form> in index.html, then change the URL below to
+               (form.dataset.ghlEndpoint || '/').
+
+               GHL expects JSON, Netlify expects URL-encoded — pick
+               the right Content-Type and body format for the
+               endpoint you point at.
+               ===================================================== */
+            const endpoint = form.dataset.ghlEndpoint || '/';
+
+            fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: encode(data)

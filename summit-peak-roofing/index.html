@@ -318,11 +318,33 @@
             </ul>
         </div>
 
+        <!--
+          =============================================================
+          LEAD FORM — BACKEND HOOKUP POINT
+          =============================================================
+          Currently submits to Netlify Forms.
+          To connect to GHL (or any CRM/webhook):
+            1. Put the GHL Inbound Webhook URL in the data-ghl-endpoint
+               attribute below.
+            2. In assets/js/main.js, find the "BACKEND HOOKUP HERE"
+               comment inside the #leadForm submit handler and replace
+               the fetch URL with form.dataset.ghlEndpoint.
+            3. Leave data-netlify and the bot-field honeypot in place
+               so spam protection keeps working.
+          Field names map cleanly to GHL contact fields:
+            name → first/last (split on first space)
+            phone → phone
+            email → email
+            service → custom field "Service Requested"
+            message → notes
+          =============================================================
+        -->
         <form class="offer__form reveal" data-reveal data-delay="200"
               id="leadForm" name="free-inspection"
               method="POST"
               data-netlify="true"
               data-netlify-honeypot="bot-field"
+              data-ghl-endpoint=""
               action="/?submitted=true"
               novalidate>
             <input type="hidden" name="form-name" value="free-inspection" />
