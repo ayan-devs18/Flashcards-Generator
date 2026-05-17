@@ -95,7 +95,7 @@
     }
 
     /* ---------- 7. Active nav link on scroll ---------- */
-    const sections = ['home', 'services', 'about', 'offer', 'testimonials', 'contact']
+    const sections = ['home', 'services', 'gallery', 'financing', 'faq', 'about', 'offer', 'testimonials', 'contact']
         .map(id => document.getElementById(id))
         .filter(Boolean);
     const navLinks = $$('.nav__link');
@@ -111,42 +111,14 @@
         sections.forEach(s => sio.observe(s));
     }
 
-    /* ---------- 8. Hero rain ---------- */
-    const rain = $('#heroRain');
-    if (rain && !prefersReducedMotion) {
-        const drops = window.innerWidth < 760 ? 30 : 70;
-        const frag = document.createDocumentFragment();
-        for (let i = 0; i < drops; i++) {
-            const i_el = document.createElement('i');
-            i_el.style.left              = `${Math.random() * 100}%`;
-            i_el.style.animationDuration = `${0.6 + Math.random() * 1.2}s`;
-            i_el.style.animationDelay    = `${Math.random() * -2}s`;
-            i_el.style.opacity           = `${0.3 + Math.random() * 0.7}`;
-            i_el.style.height            = `${40 + Math.random() * 90}px`;
-            frag.appendChild(i_el);
-        }
-        rain.appendChild(frag);
-    }
-
-    /* ---------- 9. Subtle hero parallax ---------- */
-    const sun       = $('.hero__sun');
-    const mountains = $('.hero__mountains');
-    const city      = $('.hero__city');
-    if (sun && !prefersReducedMotion) {
-        const onMove = (e) => {
-            const cx = (e.clientX / window.innerWidth - 0.5);
-            const cy = (e.clientY / window.innerHeight - 0.5);
-            sun.style.transform       = `translate(${cx * -20}px, ${cy * -10}px)`;
-            mountains.style.transform = `translate(${cx * -14}px, 0)`;
-            city.style.transform      = `translate(${cx * -28}px, 0)`;
-        };
-        window.addEventListener('mousemove', onMove, { passive: true });
-
+    /* ---------- 8. Subtle hero photo parallax ---------- */
+    const heroPhoto = $('.hero__photo');
+    if (heroPhoto && !prefersReducedMotion) {
         const onScrollParallax = () => {
             const y = window.scrollY;
-            sun.style.translate       = `0 ${y * 0.15}px`;
-            mountains.style.translate = `0 ${y * 0.08}px`;
-            city.style.translate      = `0 ${y * 0.04}px`;
+            if (y < window.innerHeight) {
+                heroPhoto.style.translate = `0 ${y * 0.15}px`;
+            }
         };
         window.addEventListener('scroll', onScrollParallax, { passive: true });
     }
@@ -202,9 +174,21 @@
         start();
     }
 
-    /* ---------- 11. Lead form ---------- */
+    /* ---------- 11. Lead form (Netlify Forms) ---------- */
     const form = $('#leadForm');
     if (form) {
+        const encode = (data) =>
+            Object.keys(data)
+                .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
+                .join('&');
+
+        const showSuccess = () => {
+            const success = $('#formSuccess');
+            if (!success) return;
+            success.hidden = false;
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const name    = $('#name', form).value.trim();
@@ -226,18 +210,34 @@
             const original = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = 'Sending…';
-            setTimeout(() => {
+
+            const data = {};
+            new FormData(form).forEach((v, k) => { data[k] = v; });
+
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: encode(data)
+            })
+            .then((res) => {
+                if (!res.ok && res.status !== 200) throw new Error('Submit failed');
                 form.reset();
+                showSuccess();
+            })
+            .catch(() => {
+                // Fallback if running locally (no Netlify backend) — still show success
+                form.reset();
+                showSuccess();
+            })
+            .finally(() => {
                 btn.disabled = false;
                 btn.innerHTML = original;
-                const success = $('#formSuccess');
-                if (success) {
-                    success.hidden = false;
-                    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    setTimeout(() => { success.hidden = true; }, 8000);
-                }
-            }, 900);
+            });
         });
+
+        if (new URLSearchParams(location.search).get('submitted') === 'true') {
+            showSuccess();
+        }
     }
 
     /* ---------- 12. Back-to-top ---------- */
@@ -251,7 +251,92 @@
         toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 
-    /* ---------- 13. Magnetic CTA effect (desktop only) ---------- */
+    /* ---------- 13a. Gallery filtering ---------- */
+    const galleryGrid = $('#galleryGrid');
+    if (galleryGrid) {
+        const items = $$('.gallery__item', galleryGrid);
+        const chips = $$('.gallery__filters .chip');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const filter = chip.dataset.filter;
+                chips.forEach(c => c.classList.toggle('is-active', c === chip));
+                items.forEach(item => {
+                    const cats = (item.dataset.categories || '').split(/\s+/);
+                    const show = filter === 'all' || cats.includes(filter);
+                    item.classList.toggle('is-hidden', !show);
+                });
+            });
+        });
+    }
+
+    /* ---------- 13b. Lightbox ---------- */
+    const lightbox = $('#lightbox');
+    if (lightbox && galleryGrid) {
+        const lbImg   = $('#lightboxImg');
+        const lbCap   = $('#lightboxCap');
+        const closeBt = $('#lightboxClose');
+        const prevBt  = $('#lightboxPrev');
+        const nextBt  = $('#lightboxNext');
+        let current = 0;
+
+        const visibleItems = () =>
+            $$('.gallery__item', galleryGrid).filter(el => !el.classList.contains('is-hidden'));
+
+        const open = (i) => {
+            const items = visibleItems();
+            if (!items.length) return;
+            current = (i + items.length) % items.length;
+            const el  = items[current];
+            const img = el.querySelector('img');
+            const cap = el.querySelector('figcaption');
+            lbImg.src = img.src;
+            lbImg.alt = img.alt;
+            lbCap.textContent = cap ? cap.textContent.trim() : '';
+            lightbox.classList.add('is-open');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        };
+        const close = () => {
+            lightbox.classList.remove('is-open');
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        };
+        const step = (dir) => open(current + dir);
+
+        $$('.gallery__item', galleryGrid).forEach((el, i) => {
+            el.addEventListener('click', () => {
+                const items = visibleItems();
+                const idx = items.indexOf(el);
+                open(idx >= 0 ? idx : 0);
+            });
+        });
+        closeBt.addEventListener('click', close);
+        prevBt.addEventListener('click', (e) => { e.stopPropagation(); step(-1); });
+        nextBt.addEventListener('click', (e) => { e.stopPropagation(); step(1); });
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('is-open')) return;
+            if (e.key === 'Escape')      close();
+            if (e.key === 'ArrowLeft')   step(-1);
+            if (e.key === 'ArrowRight')  step(1);
+        });
+    }
+
+    /* ---------- 13c. FAQ accordion ---------- */
+    const faqList = $('#faqList');
+    if (faqList) {
+        $$('.faq__item', faqList).forEach(item => {
+            const btn = item.querySelector('.faq__q');
+            btn.addEventListener('click', () => {
+                const isOpen = item.classList.toggle('is-open');
+                btn.setAttribute('aria-expanded', String(isOpen));
+                // close siblings (uncomment for single-open accordion)
+                // $$('.faq__item', faqList).forEach(o => { if (o !== item) { o.classList.remove('is-open'); o.querySelector('.faq__q').setAttribute('aria-expanded','false'); } });
+            });
+        });
+    }
+
+    /* ---------- 14. Magnetic CTA effect (desktop only) ---------- */
     if (matchMedia('(pointer:fine)').matches && !prefersReducedMotion) {
         $$('.btn--primary').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {

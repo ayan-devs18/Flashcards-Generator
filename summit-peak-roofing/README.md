@@ -11,11 +11,14 @@ Tagline: *Protecting Homes One Roof at a Time.*
 - Fully responsive (desktop / tablet / mobile)
 - Sticky animated header with mobile hamburger nav
 - Animated marquee announcement bar
-- Hero section with parallax sun, mountains, city silhouettes and falling rain
+- Hero section with real Phoenix sunset photo, Ken-Burns zoom, parallax sun/mountains/city, and falling rain
 - Scroll-reveal animations (IntersectionObserver) on every section
 - Animated count-up stats
-- Hover-animated service cards with shimmer CTAs
-- Lead-magnet form with floating labels, validation, and inline success state
+- Image-led service cards with hover zoom and brand-tinted overlay
+- **Gallery** with filter chips (Residential / Commercial / Tile / Shingle / Inspections / Emergency) and a full keyboard-navigable lightbox
+- **Financing** banner with 4 glassmorphic feature cards
+- **FAQ** accordion with smooth grid-template-rows expand animation and rotating +/× icon
+- Lead form **wired to Netlify Forms** (with honeypot anti-spam, fetch submission, and ?submitted=true success state)
 - Animated process timeline
 - Touch-swipeable testimonial carousel with auto-play, dots, and arrows
 - CTA banner with rotating radial glow
@@ -25,6 +28,14 @@ Tagline: *Protecting Homes One Roof at a Time.*
 - Magnetic CTA effect on desktop
 - Respects `prefers-reduced-motion`
 - No build tools, no dependencies — vanilla HTML / CSS / JS
+
+## Netlify Forms
+
+The lead form is automatically detected by Netlify on deploy — no extra setup needed beyond hosting on Netlify. Submissions appear under your site's **Forms** tab in the Netlify dashboard. You can also forward submissions to email or webhooks (Slack, Zapier, your CRM) from there.
+
+To wire submissions to email, in Netlify: Site → **Forms** → **Form notifications** → add an email or webhook.
+
+If you ever move off Netlify, swap the `fetch('/', ...)` call in `assets/js/main.js` (`#leadForm` handler) with a POST to your endpoint of choice (Formspree, Getform, Basin, your CRM, etc.).
 
 ## Business Information Built In
 
