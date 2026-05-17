@@ -111,42 +111,14 @@
         sections.forEach(s => sio.observe(s));
     }
 
-    /* ---------- 8. Hero rain ---------- */
-    const rain = $('#heroRain');
-    if (rain && !prefersReducedMotion) {
-        const drops = window.innerWidth < 760 ? 30 : 70;
-        const frag = document.createDocumentFragment();
-        for (let i = 0; i < drops; i++) {
-            const i_el = document.createElement('i');
-            i_el.style.left              = `${Math.random() * 100}%`;
-            i_el.style.animationDuration = `${0.6 + Math.random() * 1.2}s`;
-            i_el.style.animationDelay    = `${Math.random() * -2}s`;
-            i_el.style.opacity           = `${0.3 + Math.random() * 0.7}`;
-            i_el.style.height            = `${40 + Math.random() * 90}px`;
-            frag.appendChild(i_el);
-        }
-        rain.appendChild(frag);
-    }
-
-    /* ---------- 9. Subtle hero parallax ---------- */
-    const sun       = $('.hero__sun');
-    const mountains = $('.hero__mountains');
-    const city      = $('.hero__city');
-    if (sun && !prefersReducedMotion) {
-        const onMove = (e) => {
-            const cx = (e.clientX / window.innerWidth - 0.5);
-            const cy = (e.clientY / window.innerHeight - 0.5);
-            sun.style.transform       = `translate(${cx * -20}px, ${cy * -10}px)`;
-            mountains.style.transform = `translate(${cx * -14}px, 0)`;
-            city.style.transform      = `translate(${cx * -28}px, 0)`;
-        };
-        window.addEventListener('mousemove', onMove, { passive: true });
-
+    /* ---------- 8. Subtle hero photo parallax ---------- */
+    const heroPhoto = $('.hero__photo');
+    if (heroPhoto && !prefersReducedMotion) {
         const onScrollParallax = () => {
             const y = window.scrollY;
-            sun.style.translate       = `0 ${y * 0.15}px`;
-            mountains.style.translate = `0 ${y * 0.08}px`;
-            city.style.translate      = `0 ${y * 0.04}px`;
+            if (y < window.innerHeight) {
+                heroPhoto.style.translate = `0 ${y * 0.15}px`;
+            }
         };
         window.addEventListener('scroll', onScrollParallax, { passive: true });
     }
