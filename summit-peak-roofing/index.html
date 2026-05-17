@@ -75,9 +75,10 @@
             <ul class="nav__list">
                 <li><a href="#home" class="nav__link">Home</a></li>
                 <li><a href="#services" class="nav__link">Services</a></li>
-                <li><a href="#about" class="nav__link">About</a></li>
+                <li><a href="#gallery" class="nav__link">Gallery</a></li>
+                <li><a href="#financing" class="nav__link">Financing</a></li>
+                <li><a href="#faq" class="nav__link">FAQ</a></li>
                 <li><a href="#offer" class="nav__link">Free Inspection</a></li>
-                <li><a href="#testimonials" class="nav__link">Reviews</a></li>
                 <li><a href="#contact" class="nav__link">Contact</a></li>
             </ul>
         </nav>
@@ -331,18 +332,28 @@
             </ul>
         </div>
 
-        <form class="offer__form reveal" data-reveal data-delay="200" id="leadForm" novalidate>
+        <form class="offer__form reveal" data-reveal data-delay="200"
+              id="leadForm" name="free-inspection"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              action="/?submitted=true"
+              novalidate>
+            <input type="hidden" name="form-name" value="free-inspection" />
+            <p class="field--hidden" aria-hidden="true">
+                <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
             <h3>Book My Free Inspection</h3>
             <div class="field">
-                <input type="text" id="name" name="name" required placeholder=" " />
+                <input type="text" id="name" name="name" required placeholder=" " autocomplete="name" />
                 <label for="name">Full Name</label>
             </div>
             <div class="field">
-                <input type="tel" id="phone" name="phone" required placeholder=" " />
+                <input type="tel" id="phone" name="phone" required placeholder=" " autocomplete="tel" />
                 <label for="phone">Phone Number</label>
             </div>
             <div class="field">
-                <input type="email" id="email" name="email" required placeholder=" " />
+                <input type="email" id="email" name="email" required placeholder=" " autocomplete="email" />
                 <label for="email">Email Address</label>
             </div>
             <div class="field">
@@ -453,6 +464,224 @@
                 <p>Our licensed crews complete the job on time, clean up, and stand by the work.</p>
             </li>
         </ol>
+    </div>
+</section>
+
+<!-- ============== GALLERY ============== -->
+<section class="gallery section" id="gallery">
+    <div class="container">
+        <header class="section__head">
+            <span class="eyebrow reveal" data-reveal>Our Work</span>
+            <h2 class="section__title reveal" data-reveal data-delay="100">A Glimpse at Recent Projects</h2>
+            <p class="section__sub reveal" data-reveal data-delay="200">
+                Tap any image to see it up close. Filter by service to see exactly what we do best.
+            </p>
+        </header>
+
+        <div class="gallery__filters reveal" data-reveal data-delay="300" role="tablist" aria-label="Filter gallery">
+            <button type="button" class="chip is-active" data-filter="all">All</button>
+            <button type="button" class="chip" data-filter="residential">Residential</button>
+            <button type="button" class="chip" data-filter="commercial">Commercial</button>
+            <button type="button" class="chip" data-filter="tile">Tile</button>
+            <button type="button" class="chip" data-filter="shingle">Shingle</button>
+            <button type="button" class="chip" data-filter="inspection">Inspections</button>
+            <button type="button" class="chip" data-filter="emergency">Emergency</button>
+        </div>
+
+        <div class="gallery__grid" id="galleryGrid">
+            <figure class="gallery__item reveal" data-reveal data-categories="residential shingle repair">
+                <img src="assets/img/roof-repair.jpg" alt="Roofers replacing shingles on a residential roof" loading="lazy" width="1280" height="853" />
+                <figcaption><strong>Shingle Repair</strong><span>Phoenix, AZ</span></figcaption>
+            </figure>
+            <figure class="gallery__item reveal" data-reveal data-delay="60" data-categories="residential tile replacement">
+                <img src="assets/img/tile-roofing-alt.jpg" alt="Brand new bright orange clay tile roof" loading="lazy" width="854" height="1280" />
+                <figcaption><strong>New Tile Install</strong><span>Scottsdale, AZ</span></figcaption>
+            </figure>
+            <figure class="gallery__item reveal" data-reveal data-delay="120" data-categories="residential tile">
+                <img src="assets/img/tile-roofing.jpg" alt="Mediterranean-style red tile roof from above" loading="lazy" width="1280" height="853" />
+                <figcaption><strong>Tile Restoration</strong><span>Paradise Valley, AZ</span></figcaption>
+            </figure>
+            <figure class="gallery__item reveal" data-reveal data-delay="180" data-categories="residential shingle">
+                <img src="assets/img/shingle-roofing.jpg" alt="Dark asphalt shingle roof with chimney" loading="lazy" width="1280" height="720" />
+                <figcaption><strong>Architectural Shingles</strong><span>Tempe, AZ</span></figcaption>
+            </figure>
+            <figure class="gallery__item reveal" data-reveal data-delay="240" data-categories="emergency">
+                <img src="assets/img/emergency-leak.jpg" alt="Storm rolling in over Phoenix — emergency leak response" loading="lazy" width="1280" height="853" />
+                <figcaption><strong>Storm Response</strong><span>Monsoon Season, 2025</span></figcaption>
+            </figure>
+            <figure class="gallery__item reveal" data-reveal data-delay="300" data-categories="commercial tile">
+                <img src="assets/img/tile-pattern.jpg" alt="Aerial view of commercial rooftop tiles" loading="lazy" width="1280" height="853" />
+                <figcaption><strong>Commercial Re-Roof</strong><span>Phoenix, AZ</span></figcaption>
+            </figure>
+            <figure class="gallery__item reveal" data-reveal data-delay="360" data-categories="inspection">
+                <img src="assets/img/roof-inspection.jpg" alt="Professional roofers performing a roof inspection" loading="lazy" width="1280" height="853" />
+                <figcaption><strong>21-Point Inspection</strong><span>Chandler, AZ</span></figcaption>
+            </figure>
+            <figure class="gallery__item reveal" data-reveal data-delay="420" data-categories="residential shingle replacement">
+                <img src="assets/img/roof-replacement.jpg" alt="Father and son crew installing a new residential roof" loading="lazy" width="1280" height="853" />
+                <figcaption><strong>Full Replacement</strong><span>Mesa, AZ</span></figcaption>
+            </figure>
+        </div>
+
+        <p class="gallery__note reveal" data-reveal>More photos added every month. <a href="#offer">Want yours next?</a></p>
+    </div>
+</section>
+
+<!-- ============== FINANCING ============== -->
+<section class="financing section" id="financing">
+    <div class="financing__bg" aria-hidden="true"></div>
+    <div class="container financing__grid">
+        <div class="financing__copy">
+            <span class="eyebrow eyebrow--light reveal" data-reveal>Flexible Payment Options</span>
+            <h2 class="section__title section__title--light reveal" data-reveal data-delay="100">
+                Don't Let Cost Stand Between You and a <span class="text-gradient">Safer Roof</span>
+            </h2>
+            <p class="financing__lead reveal" data-reveal data-delay="200">
+                We partner with trusted lenders to make a new roof affordable on any budget — with same-day approvals
+                and zero hidden fees.
+            </p>
+            <a href="#offer" class="btn btn--primary reveal" data-reveal data-delay="300">
+                Apply For Financing
+                <svg viewBox="0 0 24 24" class="icon"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <div class="financing__cards">
+            <div class="finance-card reveal" data-reveal data-delay="100">
+                <div class="finance-card__num">0%</div>
+                <h4>Intro APR Plans</h4>
+                <p>Qualified buyers can spread the cost with promotional 0% APR periods.</p>
+            </div>
+            <div class="finance-card reveal" data-reveal data-delay="200">
+                <div class="finance-card__num">$0</div>
+                <h4>Money Down</h4>
+                <p>No down payment required to start your project — protect your roof now, pay later.</p>
+            </div>
+            <div class="finance-card reveal" data-reveal data-delay="300">
+                <div class="finance-card__num">2 min</div>
+                <h4>Quick Approval</h4>
+                <p>Soft credit check with same-day decisions — won't impact your credit score.</p>
+            </div>
+            <div class="finance-card reveal" data-reveal data-delay="400">
+                <div class="finance-card__num">$0</div>
+                <h4>Hidden Fees</h4>
+                <p>Clear, transparent terms. The price we quote is the price you pay.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============== FAQ ============== -->
+<section class="faq section" id="faq">
+    <div class="container">
+        <header class="section__head">
+            <span class="eyebrow reveal" data-reveal>Frequently Asked</span>
+            <h2 class="section__title reveal" data-reveal data-delay="100">Roofing Questions, Honest Answers</h2>
+            <p class="section__sub reveal" data-reveal data-delay="200">
+                Got a question we didn't cover? Call us anytime at <a href="tel:+16025551847">(602) 555-1847</a>.
+            </p>
+        </header>
+
+        <ul class="faq__list" id="faqList">
+            <li class="faq__item reveal" data-reveal>
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>How long does a new roof typically last in Phoenix?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>It depends on the material. In Arizona's intense sun, expect roughly 15–25 years for
+                    architectural asphalt shingles, 40–50+ years for concrete or clay tile, and 20–30 years
+                    for TPO/modified bitumen on commercial flat roofs. Annual inspections and quick repairs
+                    can stretch any of these by years.</p>
+                </div></div>
+            </li>
+
+            <li class="faq__item reveal" data-reveal data-delay="80">
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>Are you licensed, bonded, and insured?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>Yes — Summit Peak Roofing Co. is fully licensed in the State of Arizona, bonded, and
+                    carries comprehensive general liability and workers' compensation insurance. We'll happily
+                    provide proof of coverage before any work begins.</p>
+                </div></div>
+            </li>
+
+            <li class="faq__item reveal" data-reveal data-delay="160">
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>How much does a roof replacement cost?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>Costs vary by square footage, pitch, material, and the condition of the underlying decking.
+                    Rather than guess, we offer free <strong>same-day written estimates</strong> after a
+                    21-point inspection so you get a real number, not a ballpark.</p>
+                </div></div>
+            </li>
+
+            <li class="faq__item reveal" data-reveal data-delay="240">
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>Do you work with insurance claims for storm damage?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>Absolutely. We photograph and document all damage during inspection, meet with your
+                    adjuster on-site when needed, and walk you through every step of the claims process.
+                    Many of our customers pay only their deductible for a brand new roof.</p>
+                </div></div>
+            </li>
+
+            <li class="faq__item reveal" data-reveal data-delay="320">
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>How long will the installation take?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>Most residential shingle replacements are completed in 1–2 days. Tile and larger
+                    commercial flat-roof projects can take 3–7 days. We'll provide a firm schedule with
+                    your estimate and stick to it.</p>
+                </div></div>
+            </li>
+
+            <li class="faq__item reveal" data-reveal data-delay="400">
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>What's actually included in the 21-point inspection?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>We assess shingles/tiles, flashing, vents, valleys, pipe boots, gutters, soffits,
+                    fascia, attic ventilation, decking integrity, insulation, signs of moisture, chimney
+                    seals, skylights, drainage, debris, exposed nails, ridge caps, drip edges, sealants,
+                    underlayment exposure, and overall structural alignment — with photo & video evidence
+                    and a written same-day estimate.</p>
+                </div></div>
+            </li>
+
+            <li class="faq__item reveal" data-reveal data-delay="480">
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>What areas do you serve?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>We cover the entire Phoenix Valley — including Scottsdale, Tempe, Mesa, Chandler,
+                    Gilbert, Glendale, Peoria, Paradise Valley, and Surprise. If you're not sure we serve
+                    your area, just call us.</p>
+                </div></div>
+            </li>
+
+            <li class="faq__item reveal" data-reveal data-delay="560">
+                <button class="faq__q" type="button" aria-expanded="false">
+                    <span>Do you offer warranties?</span>
+                    <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+                <div class="faq__a"><div class="faq__a-inner">
+                    <p>Yes. New roof installations come with a manufacturer-backed material warranty (typically
+                    25–50 years depending on material) plus our own workmanship warranty on labor. We'll go
+                    over the exact terms in plain English before you sign anything.</p>
+                </div></div>
+            </li>
+        </ul>
     </div>
 </section>
 
@@ -612,6 +841,9 @@
             <h4>Company</h4>
             <ul>
                 <li><a href="#about">About</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#financing">Financing</a></li>
+                <li><a href="#faq">FAQ</a></li>
                 <li><a href="#offer">Free Inspection</a></li>
                 <li><a href="#testimonials">Reviews</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -633,6 +865,17 @@
         </div>
     </div>
 </footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close">×</button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+    <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Next image">›</button>
+    <figure class="lightbox__figure">
+        <img class="lightbox__img" id="lightboxImg" src="" alt="" />
+        <figcaption class="lightbox__cap" id="lightboxCap"></figcaption>
+    </figure>
+</div>
 
 <!-- Sticky mobile call button -->
 <a href="tel:+16025551847" class="float-call" aria-label="Call Summit Peak Roofing">
